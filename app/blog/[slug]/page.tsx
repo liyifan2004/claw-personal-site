@@ -173,6 +173,10 @@ macOS 上的启动器，比 Spotlight 强大太多。可以自定义工作流，
   },
 };
 
+export function generateStaticParams() {
+  return Object.keys(blogPosts).map((slug) => ({ slug }));
+}
+
 export default function BlogPostPage() {
   const params = useParams();
   const slug = params.slug as string;
@@ -198,14 +202,12 @@ export default function BlogPostPage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-zinc-50 font-sans text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100">
-      {/* Background */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 h-[600px] w-[600px] rounded-full bg-blue-500/10 blur-3xl dark:bg-blue-500/5" />
         <div className="absolute -bottom-40 -left-40 h-[500px] w-[500px] rounded-full bg-purple-500/10 blur-3xl dark:bg-purple-500/5" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-3xl px-6 py-12 sm:px-8">
-        {/* Back Link */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -220,7 +222,6 @@ export default function BlogPostPage() {
           </Link>
         </motion.div>
 
-        {/* Header */}
         <motion.header
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -255,7 +256,6 @@ export default function BlogPostPage() {
           </div>
         </motion.header>
 
-        {/* Content */}
         <motion.article
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -307,7 +307,6 @@ export default function BlogPostPage() {
           </div>
         </motion.article>
 
-        {/* Footer */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
