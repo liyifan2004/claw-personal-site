@@ -3,7 +3,9 @@
 import { ParticlesBackground } from "./components/particles";
 import { Navigation } from "./components/nav";
 import { Hero } from "./components/hero";
+import { FeaturedProject } from "./components/featured-project";
 import { BentoGrid } from "./components/bento-grid";
+import { Thoughts } from "./components/thoughts";
 import { motion } from "framer-motion";
 
 export default function Home() {
@@ -21,7 +23,9 @@ export default function Home() {
       <div className="relative z-10">
         <Navigation />
         <Hero />
+        <FeaturedProject />
         <BentoGrid />
+        <Thoughts />
         
         {/* Footer */}
         <footer className="px-6 sm:px-10 py-16 border-t border-[var(--border)]">

@@ -44,12 +44,13 @@ export function Hero() {
           <Lobster3D />
         </motion.div>
 
-        {/* Title */}
+        {/* Title with Space Grotesk */}
         <motion.h1
           initial={{ y: 40, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           className="text-display gradient-lobster text-glow mb-6"
+          style={{ fontFamily: "var(--font-space), system-ui, sans-serif" }}
         >
           CLAW
         </motion.h1>
