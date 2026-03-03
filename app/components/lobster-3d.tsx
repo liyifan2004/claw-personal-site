@@ -2,7 +2,7 @@
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import { LobsterLogo } from "./lobster-logo";
 
 export function Lobster3D() {
   const [isMounted, setIsMounted] = useState(false);
@@ -65,20 +65,9 @@ export function Lobster3D() {
           <div className="absolute inset-2 rounded-full bg-gradient-to-br from-[var(--lobster)]/20 to-transparent" />
           
           {/* SVG Lobster Logo */}
-          <motion.div 
-            className="relative w-12 h-12 sm:w-14 sm:h-14 z-10"
-            animate={{ y: [0, -6, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <Image
-              src="/lobster-logo-animated.svg"
-              alt="Claw Logo"
-              width={56}
-              height={56}
-              className="w-full h-full"
-              priority
-            />
-          </motion.div>
+          <div className="relative w-12 h-12 sm:w-14 sm:h-14 z-10">
+            <LobsterLogo className="w-full h-full" />
+          </div>
           
           {/* Decorative ring */}
           <div className="absolute inset-3 rounded-full border border-white/[0.08]" />
