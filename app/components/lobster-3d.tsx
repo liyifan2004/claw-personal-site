@@ -2,6 +2,7 @@
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export function Lobster3D() {
   const [isMounted, setIsMounted] = useState(false);
@@ -32,14 +33,14 @@ export function Lobster3D() {
   return (
     <div className="relative" style={{ perspective: 1000 }}>
       {/* Outer glow rings */}
-      <div className="absolute inset-0 -m-8">
-        <div className="absolute inset-0 rounded-full border border-[#FF6B35]/10 animate-pulse" style={{ animationDuration: "3s" }} />
-        <div className="absolute inset-4 rounded-full border border-[#FF6B35]/5 animate-pulse" style={{ animationDuration: "4s", animationDelay: "1s" }} />
+      <div className="absolute inset-0 -m-6">
+        <div className="absolute inset-0 rounded-full border border-[var(--lobster)]/10 animate-pulse" style={{ animationDuration: "3s" }} />
+        <div className="absolute inset-3 rounded-full border border-[var(--lobster)]/5 animate-pulse" style={{ animationDuration: "4s", animationDelay: "1s" }} />
       </div>
       
       {/* Glow effect */}
       <div className="absolute inset-0 animate-pulse-glow">
-        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#FF6B35]/25 via-[#FF8C69]/15 to-[#FF6B35]/25 blur-2xl scale-125" />
+        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[var(--lobster)]/25 via-[var(--lobster-light)]/15 to-[var(--lobster)]/25 blur-2xl scale-125" />
       </div>
       
       {/* 3D Lobster container */}
@@ -55,33 +56,40 @@ export function Lobster3D() {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="relative flex items-center justify-center w-24 h-24 sm:w-28 sm:h-28"
+          className="relative flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24"
         >
           {/* Glass sphere background */}
           <div className="absolute inset-0 rounded-full glass glow-lobster" />
           
           {/* Inner glow */}
-          <div className="absolute inset-2 rounded-full bg-gradient-to-br from-[#FF6B35]/20 to-transparent" />
+          <div className="absolute inset-2 rounded-full bg-gradient-to-br from-[var(--lobster)]/20 to-transparent" />
           
-          {/* Lobster emoji */}
-          <motion.span 
-            className="relative text-5xl sm:text-6xl select-none z-10"
-            animate={{ y: [0, -8, 0] }}
+          {/* SVG Lobster Logo */}
+          <motion.div 
+            className="relative w-12 h-12 sm:w-14 sm:h-14 z-10"
+            animate={{ y: [0, -6, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           >
-            🦞
-          </motion.span>
+            <Image
+              src="/lobster-logo-animated.svg"
+              alt="Claw Logo"
+              width={56}
+              height={56}
+              className="w-full h-full"
+              priority
+            />
+          </motion.div>
           
           {/* Decorative ring */}
           <div className="absolute inset-3 rounded-full border border-white/[0.08]" />
         </motion.div>
         
         {/* Orbiting dots */}
-        <div className="absolute inset-0 animate-spin" style={{ animationDuration: "15s" }}>
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#FF6B35] shadow-[0_0_10px_#FF6B35]" />
+        <div className="absolute inset-0 animate-orbit" style={{ animationDuration: "15s" }}>
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[var(--lobster)] shadow-[0_0_10px_var(--lobster)]" />
         </div>
-        <div className="absolute inset-0 animate-spin" style={{ animationDuration: "20s", animationDirection: "reverse" }}>
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#FFB627]" />
+        <div className="absolute inset-0 animate-orbit" style={{ animationDuration: "20s", animationDirection: "reverse" }}>
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[var(--amber)]" />
         </div>
       </motion.div>
     </div>

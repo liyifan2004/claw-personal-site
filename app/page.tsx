@@ -14,7 +14,7 @@ export default function Home() {
       {/* Background layers */}
       <ParticlesBackground />
       
-      <div className="fixed inset-0 pointer-events-none z-0">
+      <div className="fixed inset-0 pointer-events-none z-0 dark:opacity-100 opacity-0 transition-opacity duration-500">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(255,107,53,0.06),_transparent_50%)]" />
         <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-[var(--void)] to-transparent" />
       </div>

@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Core colors */
+  /* Core colors - Dark mode (default) */
   --void: #020202;
   --surface: #0a0a0a;
   --surface-elevated: #111111;
@@ -16,12 +16,26 @@
   --amber: #FFB627;
   --teal: #06A77D;
   
-  /* Text scale - consolidated */
+  /* Text scale */
   --text-primary: rgba(255, 255, 255, 0.9);
   --text-secondary: rgba(255, 255, 255, 0.6);
   --text-muted: rgba(255, 255, 255, 0.4);
   --text-faint: rgba(255, 255, 255, 0.2);
   --border: rgba(255, 255, 255, 0.08);
+}
+
+/* Light mode overrides */
+:root.light,
+.light {
+  --void: #fafafa;
+  --surface: #ffffff;
+  --surface-elevated: #f5f5f5;
+  
+  --text-primary: rgba(0, 0, 0, 0.9);
+  --text-secondary: rgba(0, 0, 0, 0.6);
+  --text-muted: rgba(0, 0, 0, 0.4);
+  --text-faint: rgba(0, 0, 0, 0.15);
+  --border: rgba(0, 0, 0, 0.08);
 }
 
 @theme inline {
@@ -51,15 +65,14 @@ body {
   overflow-x: hidden;
   font-size: 16px;
   line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Selection */
 ::selection {
   background: var(--lobster-glow);
   color: white;
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -117,18 +130,22 @@ body {
   background-clip: text;
 }
 
-/* Glow effects */
-.glow-lobster {
+/* Glow effects - only in dark mode */
+.dark .glow-lobster {
   box-shadow: 
     0 0 40px rgba(255, 107, 53, 0.3),
     0 0 80px rgba(255, 107, 53, 0.15),
     inset 0 0 40px rgba(255, 107, 53, 0.05);
 }
 
-.text-glow {
+.dark .text-glow {
   text-shadow: 
     0 0 30px rgba(255, 107, 53, 0.4),
     0 0 60px rgba(255, 107, 53, 0.2);
+}
+
+.light .text-glow {
+  text-shadow: none;
 }
 
 /* Glass effect */
@@ -139,12 +156,20 @@ body {
   border: 1px solid var(--border);
 }
 
+.light .glass {
+  background: rgba(0, 0, 0, 0.02);
+}
+
 .glass-hover:hover {
   background: rgba(255, 255, 255, 0.06);
   border-color: rgba(255, 107, 53, 0.3);
 }
 
-/* Primary card - distinct treatment */
+.light .glass-hover:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* Primary card */
 .card-primary {
   background: linear-gradient(135deg, rgba(255, 107, 53, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
   border: 1px solid rgba(255, 107, 53, 0.15);
@@ -154,8 +179,12 @@ body {
   border-color: rgba(255, 107, 53, 0.3);
 }
 
-/* Noise texture */
-.noise::before {
+.light .card-primary {
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.05) 0%, rgba(0, 0, 0, 0.01) 100%);
+}
+
+/* Noise texture - only in dark mode */
+.dark .noise::before {
   content: "";
   position: fixed;
   inset: 0;
@@ -220,10 +249,21 @@ body {
   transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Particles */
-.particles-canvas {
+/* Particles - only in dark mode */
+.dark .particles-canvas {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
+}
+
+.light .particles-canvas {
+  display: none;
+}
+
+/* Smooth theme transitions */
+*, *::before, *::after {
+  transition-property: background-color, border-color, color;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
 }
