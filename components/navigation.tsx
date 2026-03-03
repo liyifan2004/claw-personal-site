@@ -3,41 +3,20 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Home,
-  User,
-  FolderOpen,
-  BookOpen,
-  Image,
-  Wrench,
-  Mail,
-  Menu,
-  X,
-  Sun,
-  Moon,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Menu, X } from "lucide-react";
 
 const navItems = [
-  { href: "/", label: "首页", icon: Home },
-  { href: "/about", label: "关于", icon: User },
-  { href: "/projects", label: "项目", icon: FolderOpen },
-  { href: "/blog", label: "博客", icon: BookOpen },
-  { href: "/gallery", label: "画廊", icon: Image },
-  { href: "/tools", label: "工具", icon: Wrench },
-  { href: "/contact", label: "联系", icon: Mail },
+  { href: "/", label: "首页" },
+  { href: "/about", label: "关于" },
+  { href: "/gallery", label: "画廊" },
+  { href: "/contact", label: "联系" },
 ];
 
 export function Navigation() {
   const pathname = usePathname();
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -45,7 +24,6 @@ export function Navigation() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
@@ -55,53 +33,47 @@ export function Navigation() {
 
   return (
     <>
-      {/* ─── Desktop / Tablet navbar ─── */}
       <motion.header
-        initial={{ y: -80, opacity: 0 }}
+        initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className={cn(
-          "fixed top-0 right-0 left-0 z-50 transition-all duration-300",
-          scrolled
-            ? "border-b border-zinc-200/60 bg-white/70 shadow-sm backdrop-blur-xl dark:border-zinc-800/60 dark:bg-zinc-950/70"
-            : "bg-transparent"
-        )}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className="fixed top-0 left-0 right-0 z-50 flex justify-center px-6 pt-6"
       >
-        <nav className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
-          {/* Logo */}
-          <Link href="/" className="group flex items-center gap-2">
-            <motion.span
-              whileHover={{ rotate: [0, -10, 10, -10, 0] }}
-              transition={{ duration: 0.5 }}
-              className="text-2xl"
-            >
-              🦀
-            </motion.span>
-            <span className="text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-              Claw
-            </span>
+        <nav
+          className={`flex h-12 items-center gap-1 rounded-full border px-2 transition-all duration-700 ${
+            scrolled
+              ? "border-white/10 bg-[#0a0a0a]/80 shadow-lg shadow-black/20 backdrop-blur-xl"
+              : "border-white/[0.06] bg-white/[0.03] backdrop-blur-md"
+          }`}
+        >
+          <Link
+            href="/"
+            className="flex items-center gap-2 rounded-full px-3 py-1.5 transition-colors hover:bg-white/[0.06]"
+          >
+            <span className="text-base">🦀</span>
+            <span className="text-xs font-medium tracking-wide">Claw</span>
           </Link>
 
-          {/* Desktop links */}
-          <ul className="hidden items-center gap-1 md:flex">
+          <div className="mx-1 hidden h-4 w-px bg-white/10 md:block" />
+
+          <ul className="hidden items-center gap-0.5 md:flex">
             {navItems.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={cn(
-                    "relative rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  className={`relative rounded-full px-3.5 py-1.5 text-xs transition-all duration-300 ${
                     isActive(item.href)
-                      ? "text-zinc-900 dark:text-zinc-100"
-                      : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-                  )}
+                      ? "text-white"
+                      : "text-white/40 hover:text-white/70"
+                  }`}
                 >
                   {isActive(item.href) && (
                     <motion.span
                       layoutId="nav-pill"
-                      className="absolute inset-0 rounded-lg bg-zinc-100 dark:bg-zinc-800/60"
+                      className="absolute inset-0 rounded-full bg-white/[0.08]"
                       transition={{
                         type: "spring",
-                        stiffness: 350,
+                        stiffness: 400,
                         damping: 30,
                       }}
                     />
@@ -112,105 +84,59 @@ export function Navigation() {
             ))}
           </ul>
 
-          {/* Right side: theme toggle + mobile hamburger */}
-          <div className="flex items-center gap-2">
-            {/* Theme toggle */}
-            {mounted && (
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-zinc-200/60 bg-white/60 backdrop-blur-md transition-colors hover:bg-zinc-100 dark:border-zinc-700/60 dark:bg-zinc-900/60 dark:hover:bg-zinc-800"
-                aria-label="切换主题"
-              >
-                {theme === "dark" ? (
-                  <Sun className="h-4 w-4 text-yellow-400" />
-                ) : (
-                  <Moon className="h-4 w-4 text-zinc-600" />
-                )}
-              </motion.button>
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="flex h-8 w-8 items-center justify-center rounded-full text-white/50 transition-colors hover:bg-white/[0.06] hover:text-white md:hidden"
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? (
+              <X className="h-3.5 w-3.5" />
+            ) : (
+              <Menu className="h-3.5 w-3.5" />
             )}
-
-            {/* Mobile hamburger */}
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-zinc-200/60 bg-white/60 backdrop-blur-md transition-colors hover:bg-zinc-100 md:hidden dark:border-zinc-700/60 dark:bg-zinc-900/60 dark:hover:bg-zinc-800"
-              aria-label="菜单"
-            >
-              {mobileOpen ? (
-                <X className="h-4 w-4" />
-              ) : (
-                <Menu className="h-4 w-4" />
-              )}
-            </motion.button>
-          </div>
+          </button>
         </nav>
       </motion.header>
 
-      {/* ─── Mobile menu overlay ─── */}
       <AnimatePresence>
         {mobileOpen && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
               onClick={() => setMobileOpen(false)}
-              className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm md:hidden"
+              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
             />
-
-            {/* Panel */}
             <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="fixed top-0 right-0 bottom-0 z-50 w-72 border-l border-zinc-200/60 bg-white/90 p-6 pt-20 backdrop-blur-xl md:hidden dark:border-zinc-800/60 dark:bg-zinc-950/90"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="fixed top-24 left-6 right-6 z-50 overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a0a]/95 p-2 backdrop-blur-xl md:hidden"
             >
-              {/* Close button */}
-              <button
-                onClick={() => setMobileOpen(false)}
-                className="absolute top-5 right-5 flex h-9 w-9 items-center justify-center rounded-full border border-zinc-200/60 transition-colors hover:bg-zinc-100 dark:border-zinc-700/60 dark:hover:bg-zinc-800"
-                aria-label="关闭菜单"
-              >
-                <X className="h-4 w-4" />
-              </button>
-
-              <ul className="space-y-1">
-                {navItems.map((item, i) => {
-                  const Icon = item.icon;
-                  return (
-                    <motion.li
-                      key={item.href}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.05 }}
+              <ul className="space-y-0.5">
+                {navItems.map((item, i) => (
+                  <motion.li
+                    key={item.href}
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.04 }}
+                  >
+                    <Link
+                      href={item.href}
+                      className={`block rounded-xl px-4 py-3 text-sm transition-colors ${
+                        isActive(item.href)
+                          ? "bg-white/[0.08] text-white"
+                          : "text-white/40 hover:bg-white/[0.04] hover:text-white"
+                      }`}
                     >
-                      <Link
-                        href={item.href}
-                        className={cn(
-                          "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors",
-                          isActive(item.href)
-                            ? "bg-gradient-to-r from-blue-500/10 to-purple-500/10 text-zinc-900 dark:text-zinc-100"
-                            : "text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/60 dark:hover:text-zinc-100"
-                        )}
-                      >
-                        <Icon className="h-4 w-4" />
-                        {item.label}
-                      </Link>
-                    </motion.li>
-                  );
-                })}
+                      {item.label}
+                    </Link>
+                  </motion.li>
+                ))}
               </ul>
-
-              {/* Mobile footer */}
-              <div className="mt-8 border-t border-zinc-200/60 pt-6 dark:border-zinc-800/60">
-                <p className="text-xs text-zinc-400 dark:text-zinc-600">
-                  🦀 Claw — Your AI Assistant
-                </p>
-              </div>
             </motion.div>
           </>
         )}

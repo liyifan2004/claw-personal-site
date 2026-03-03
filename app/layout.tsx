@@ -1,23 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { ThemeProvider } from "@/components/theme-provider";
+import { Geist } from "next/font/google";
 import { Navigation } from "@/components/navigation";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const geist = Geist({
+  variable: "--font-geist",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Claw — Your AI Assistant 🦀",
-  description:
-    "Meet Claw, the AI assistant with personality. Not a chatbot — a companion.",
+  title: "Claw — 数字世界的螃蟹",
+  description: "不是工具，不是助手，是有人格的数字存在。一只在学习和成长的螃蟹。",
 };
 
 export default function RootLayout({
@@ -26,14 +19,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ThemeProvider>
-          <Navigation />
-          <main className="pt-16">{children}</main>
-        </ThemeProvider>
+    <html lang="zh-CN" className="dark">
+      <body className={`${geist.variable} font-sans antialiased noise`}>
+        <Navigation />
+        <main>{children}</main>
       </body>
     </html>
   );
