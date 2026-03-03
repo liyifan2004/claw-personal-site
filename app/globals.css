@@ -4,18 +4,24 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* Core colors */
   --void: #020202;
   --surface: #0a0a0a;
   --surface-elevated: #111111;
+  
+  /* Brand colors */
   --lobster: #FF6B35;
   --lobster-light: #FF8C69;
   --lobster-glow: rgba(255, 107, 53, 0.5);
   --amber: #FFB627;
   --teal: #06A77D;
-  --cream: #FAF9F6;
-  --cream-muted: rgba(250, 249, 246, 0.7);
-  --cream-subtle: rgba(250, 249, 246, 0.4);
-  --cream-faint: rgba(250, 249, 246, 0.15);
+  
+  /* Text scale - consolidated */
+  --text-primary: rgba(255, 255, 255, 0.9);
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --text-muted: rgba(255, 255, 255, 0.4);
+  --text-faint: rgba(255, 255, 255, 0.2);
+  --border: rgba(255, 255, 255, 0.08);
 }
 
 @theme inline {
@@ -26,7 +32,6 @@
   --color-lobster-light: var(--lobster-light);
   --color-amber: var(--amber);
   --color-teal: var(--teal);
-  --color-cream: var(--cream);
 }
 
 * {
@@ -39,18 +44,22 @@ html {
 
 body {
   background: var(--void);
-  color: var(--cream);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text-primary);
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  font-size: 16px;
+  line-height: 1.6;
 }
 
+/* Selection */
 ::selection {
   background: var(--lobster-glow);
-  color: var(--cream);
+  color: white;
 }
 
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -60,7 +69,44 @@ body {
 ::-webkit-scrollbar-thumb {
   background: var(--lobster);
   border-radius: 3px;
-  opacity: 0.4;
+}
+
+/* Typography scale */
+.text-display {
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+
+.text-title {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+
+.text-body {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.text-small {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.text-label {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
 }
 
 /* Gradient text */
@@ -74,15 +120,15 @@ body {
 /* Glow effects */
 .glow-lobster {
   box-shadow: 
-    0 0 60px rgba(255, 107, 53, 0.3),
-    0 0 120px rgba(255, 107, 53, 0.1),
-    inset 0 0 60px rgba(255, 107, 53, 0.05);
+    0 0 40px rgba(255, 107, 53, 0.3),
+    0 0 80px rgba(255, 107, 53, 0.15),
+    inset 0 0 40px rgba(255, 107, 53, 0.05);
 }
 
 .text-glow {
   text-shadow: 
-    0 0 40px rgba(255, 107, 53, 0.4),
-    0 0 80px rgba(255, 107, 53, 0.2);
+    0 0 30px rgba(255, 107, 53, 0.4),
+    0 0 60px rgba(255, 107, 53, 0.2);
 }
 
 /* Glass effect */
@@ -90,12 +136,22 @@ body {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border);
 }
 
 .glass-hover:hover {
   background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 107, 53, 0.2);
+  border-color: rgba(255, 107, 53, 0.3);
+}
+
+/* Primary card - distinct treatment */
+.card-primary {
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 107, 53, 0.15);
+}
+
+.card-primary:hover {
+  border-color: rgba(255, 107, 53, 0.3);
 }
 
 /* Noise texture */
@@ -119,7 +175,7 @@ body {
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
     rgba(255, 107, 53, 0.08),
     transparent 40%
   );
@@ -131,57 +187,32 @@ body {
   opacity: 1;
 }
 
-/* Border gradient */
-.border-gradient {
-  position: relative;
-}
-.border-gradient::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  padding: 1px;
-  border-radius: inherit;
-  background: linear-gradient(135deg, rgba(255, 107, 53, 0.3), rgba(255, 255, 255, 0.1));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
 /* Animations */
 @keyframes float {
-  0%, 100% { transform: translateY(0px) rotateX(0deg) rotateY(0deg); }
-  50% { transform: translateY(-15px) rotateX(2deg) rotateY(2deg); }
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
 }
 
 .animate-float {
-  animation: float 5s ease-in-out infinite;
+  animation: float 4s ease-in-out infinite;
 }
 
 @keyframes pulse-glow {
-  0%, 100% { opacity: 0.3; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.02); }
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.5; }
 }
 
 .animate-pulse-glow {
   animation: pulse-glow 3s ease-in-out infinite;
 }
 
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+@keyframes orbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-.animate-shimmer {
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.05) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 8s infinite;
+.animate-orbit {
+  animation: orbit 20s linear infinite;
 }
 
 /* Magnetic button */

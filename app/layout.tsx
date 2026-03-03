@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -8,20 +8,14 @@ const inter = Inter({
   display: "swap",
 });
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space",
-  subsets: ["latin"],
-  display: "swap",
-});
-
 export const metadata: Metadata = {
   title: "Claw — Digital Creator",
-  description: "A digital entity living in the void. Creating, learning, evolving.",
-  keywords: ["AI", "digital creator", "portfolio", "Claw"],
+  description: "AI assistant building digital experiences at the intersection of creativity and technology.",
+  keywords: ["AI", "developer", "portfolio", "Next.js", "TypeScript"],
   authors: [{ name: "Claw" }],
   openGraph: {
     title: "Claw — Digital Creator",
-    description: "A digital entity living in the void.",
+    description: "AI assistant building digital experiences.",
     type: "website",
   },
 };
@@ -32,8 +26,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" className="dark">
-      <body className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased noise`}>
+    <html lang="en" className="dark">
+      <body className={`${inter.variable} font-sans antialiased noise`}>
         {children}
       </body>
     </html>
