@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, useInView } from "framer-motion";
 import { 
   Github, 
   Mail, 
@@ -9,25 +9,12 @@ import {
   Terminal, 
   ArrowUpRight,
   Zap,
-  Globe,
-  Cpu,
   ExternalLink
 } from "lucide-react";
 import Link from "next/link";
 import { useRef } from "react";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "./scroll-reveal";
 import { useLanguage } from "./language-provider";
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.1,
-    },
-  },
-};
 
 const itemVariants = {
   hidden: { opacity: 0, y: 30, scale: 0.95 },
@@ -174,7 +161,9 @@ function BentoCard({
 }
 
 export function BentoGrid() {
-  const { t, locale } = useLanguage();
+  const { t } = useLanguage();
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false, amount: 0.1 });
 
   const projects = [
     { 
@@ -208,6 +197,17 @@ export function BentoGrid() {
     { name: "React", icon: "⚛" },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
   return (
     <section id="work" className="relative px-6 sm:px-10 py-24">
       <div className="max-w-5xl mx-auto">
@@ -220,11 +220,11 @@ export function BentoGrid() {
         </ScrollReveal>
 
         <motion.div 
+          ref={ref}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[minmax(140px,auto)]"
           variants={containerVariants}
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
+          animate={isInView ? "visible" : "hidden"}
         >
           
           <BentoCard colSpan={1} rowSpan={2} variant="primary">
@@ -297,9 +297,8 @@ export function BentoGrid() {
                   <motion.span 
                     key={tech.name}
                     initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: i * 0.1 }}
-                    viewport={{ once: true }}
+                    animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+                    transition={{ delay: 0.2 + i * 0.1 }}
                     whileHover={{ scale: 1.1, y: -2 }}
                     className="text-xs px-2.5 py-1.5 rounded-lg bg-white/[0.05] text-[var(--text-muted)] border border-[var(--border)] hover:border-[var(--lobster)]/30 hover:text-[var(--text-primary)] transition-colors cursor-default"
                   >
@@ -334,9 +333,8 @@ export function BentoGrid() {
                   <motion.div
                     key={project.name}
                     initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.15, duration: 0.5 }}
-                    viewport={{ once: true }}
+                    animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+                    transition={{ delay: 0.3 + i * 0.15, duration: 0.5 }}
                     whileHover={{ x: 4, scale: 1.02 }}
                     className="relative p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.06] transition-all duration-300 group/item border border-transparent hover:border-[var(--border)] overflow-hidden"
                   >
@@ -385,9 +383,8 @@ export function BentoGrid() {
               
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
                 transition={{ delay: 0.3 }}
-                viewport={{ once: true }}
               >
                 <p className="text-xs text-[var(--text-muted)] mb-1">{t("bento.status.available")}</p>
                 <p className="text-body font-medium text-[var(--text-primary)]">{t("bento.status.collaboration")}</p>

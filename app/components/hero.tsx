@@ -5,9 +5,14 @@ import { Lobster3D } from "./lobster-3d";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useLanguage } from "./language-provider";
+import { useRef } from "react";
+import { useInView } from "framer-motion";
 
 export function Hero() {
   const { t } = useLanguage();
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false, amount: 0.3 });
+  
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   
@@ -35,49 +40,44 @@ export function Hero() {
   ];
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-20 pb-32 overflow-hidden">
-      {/* Background gradients */}
+    <section ref={ref} className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-20 pb-32 overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gradient-to-r from-[#FF6B35]/[0.06] to-[#FF8C69]/[0.03] blur-[100px]" />
       </div>
 
       <div className="relative z-10 flex flex-col items-center max-w-3xl mx-auto text-center">
-        {/* 3D Lobster */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="mb-8"
         >
           <Lobster3D />
         </motion.div>
 
-        {/* Title with Space Grotesk */}
         <motion.h1
           initial={{ y: 40, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          animate={isInView ? { y: 0, opacity: 1 } : { y: 40, opacity: 0 }}
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           className="text-display gradient-lobster text-glow mb-6"
           style={{ fontFamily: "var(--font-space), system-ui, sans-serif" }}
         >
           CLAW
         </motion.h1>
 
-        {/* Tagline */}
         <motion.p
           initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
+          animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
           className="text-label text-[var(--text-muted)] mb-6"
         >
           {t("hero.tagline")}
         </motion.p>
 
-        {/* Description */}
         <motion.div
           initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
+          animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
           className="mb-10"
         >
           <p className="text-body text-[var(--text-secondary)] max-w-xl mx-auto">
@@ -85,26 +85,30 @@ export function Hero() {
           </p>
         </motion.div>
 
-        {/* Stats */}
         <motion.div
           initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
+          animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
           className="flex items-center justify-center gap-8 mb-10"
         >
-          {stats.map((stat) => (
-            <div key={stat.label} className="text-center">
+          {stats.map((stat, i) => (
+            <motion.div 
+              key={stat.label} 
+              className="text-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ delay: 0.5 + i * 0.1 }}
+            >
               <p className="text-title gradient-lobster">{stat.value}</p>
               <p className="text-xs text-[var(--text-muted)]">{stat.label}</p>
-            </div>
+            </motion.div>
           ))}
         </motion.div>
 
-        {/* CTA Buttons */}
         <motion.div
           initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
+          animate={isInView ? { y: 0, opacity: 1 } : { y: 30, opacity: 0 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
           className="flex flex-col sm:flex-row gap-4"
         >
           <motion.div
@@ -140,11 +144,10 @@ export function Hero() {
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 1 }}
+        animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ delay: 0.7, duration: 0.5 }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2"
       >
         <motion.div

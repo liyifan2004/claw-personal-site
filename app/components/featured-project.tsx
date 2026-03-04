@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, useInView } from "framer-motion";
 import { ExternalLink, Github, Zap, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { ScrollReveal } from "./scroll-reveal";
@@ -9,6 +9,9 @@ import { useLanguage } from "./language-provider";
 
 export function FeaturedProject() {
   const { t } = useLanguage();
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: false, amount: 0.2 });
+  
   const containerRef = useRef(null);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -35,9 +38,8 @@ export function FeaturedProject() {
   ];
 
   return (
-    <section className="relative px-6 sm:px-10 py-24">
+    <section ref={sectionRef} className="relative px-6 sm:px-10 py-24">
       <div className="max-w-5xl mx-auto">
-        {/* Section label */}
         <ScrollReveal className="mb-8">
           <motion.span 
             className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--lobster)]/10 border border-[var(--lobster)]/20 text-xs font-medium text-[var(--lobster)] cursor-default"
@@ -54,9 +56,7 @@ export function FeaturedProject() {
           </motion.span>
         </ScrollReveal>
 
-        {/* Main content */}
         <div className="grid lg:grid-cols-2 gap-8 items-center">
-          {/* Left: Visual with 3D tilt */}
           <ScrollReveal direction="left" delay={0.1}>
             <motion.div
               ref={containerRef}
@@ -102,18 +102,16 @@ export function FeaturedProject() {
                     <motion.p 
                       className="text-lg font-semibold text-[var(--text-primary)]"
                       initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
+                      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
                       transition={{ delay: 0.3 }}
-                      viewport={{ once: true }}
                     >
                       QuerySwitch
                     </motion.p>
                     <motion.p 
                       className="text-sm text-[var(--text-muted)]"
                       initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
+                      animate={isInView ? { opacity: 1 } : { opacity: 0 }}
                       transition={{ delay: 0.4 }}
-                      viewport={{ once: true }}
                     >
                       Browser Extension
                     </motion.p>
@@ -152,7 +150,6 @@ export function FeaturedProject() {
             </motion.div>
           </ScrollReveal>
 
-          {/* Right: Content */}
           <ScrollReveal direction="right" delay={0.2}>
             <div className="space-y-6">
               <div>
@@ -173,9 +170,8 @@ export function FeaturedProject() {
                   <motion.div
                     key={step.num}
                     initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
                     transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
-                    viewport={{ once: true }}
                     whileHover={{ x: 5 }}
                     className="flex items-start gap-3 group cursor-default"
                   >
@@ -196,17 +192,15 @@ export function FeaturedProject() {
               <motion.div 
                 className="flex flex-wrap gap-2"
                 initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
+                animate={isInView ? { opacity: 1 } : { opacity: 0 }}
                 transition={{ delay: 0.6 }}
-                viewport={{ once: true }}
               >
-                {t("featured.querySwitch.tech").split(",").map((tech, i) => (
+                {t("featured.querySwitch.tech")?.split(",").map((tech, i) => (
                   <motion.span 
                     key={tech}
                     initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
+                    animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
                     transition={{ delay: 0.7 + i * 0.1 }}
-                    viewport={{ once: true }}
                     whileHover={{ scale: 1.1, y: -2 }}
                     className="text-xs px-3 py-1.5 rounded-full bg-white/[0.05] text-[var(--text-secondary)] border border-[var(--border)] hover:border-[var(--lobster)]/30 cursor-default"
                   >
@@ -218,9 +212,8 @@ export function FeaturedProject() {
               <motion.div 
                 className="flex gap-3"
                 initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                 transition={{ delay: 0.8 }}
-                viewport={{ once: true }}
               >
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
                   <Link
