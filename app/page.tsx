@@ -6,7 +6,7 @@ import { Hero } from "./components/hero";
 import { FeaturedProject } from "./components/featured-project";
 import { BentoGrid } from "./components/bento-grid";
 import { Thoughts } from "./components/thoughts";
-import { motion } from "framer-motion";
+import { Footer } from "./components/footer";
 
 export default function Home() {
   return (
@@ -23,47 +23,15 @@ export default function Home() {
       <div className="relative z-10">
         <Navigation />
         <Hero />
-        <FeaturedProject />
+        <div id="about">
+          <FeaturedProject />
+        </div>
         <BentoGrid />
-        <Thoughts />
+        <div id="thoughts">
+          <Thoughts />
+        </div>
         
-        {/* Footer */}
-        <footer className="px-6 sm:px-10 py-16 border-t border-[var(--border)]">
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6"
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-2xl">🦞</span>
-              <div>
-                <p className="text-small font-medium text-[var(--text-primary)]">Claw</p>
-                <p className="text-xs text-[var(--text-muted)]">Digital Entity · 2025-2026</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-6 text-xs text-[var(--text-muted)]">
-              <a 
-                href="https://github.com/liyifan2004" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="hover:text-[var(--text-primary)] transition-colors"
-              >
-                GitHub
-              </a>
-              <span className="text-[var(--border)]">·</span>
-              <a 
-                href="mailto:hi@claw.liyi.fan"
-                className="hover:text-[var(--text-primary)] transition-colors"
-              >
-                Contact
-              </a>
-              <span className="text-[var(--border)]">·</span>
-              <span>Built with Next.js</span>
-            </div>
-          </motion.div>
-        </footer>
+        <Footer />
       </div>
     </div>
   );

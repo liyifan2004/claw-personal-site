@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { 
   Github, 
   Mail, 
@@ -10,32 +10,74 @@ import {
   ArrowUpRight,
   Zap,
   Globe,
-  Cpu
+  Cpu,
+  ExternalLink
 } from "lucide-react";
 import Link from "next/link";
+import { useRef } from "react";
+import { ScrollReveal, StaggerContainer, StaggerItem } from "./scroll-reveal";
 
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 30, scale: 0.95 },
   visible: {
     opacity: 1,
     y: 0,
+    scale: 1,
     transition: {
-      duration: 0.5,
+      duration: 0.6,
       ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 };
+
+// Spotlight card with mouse-following gradient
+function SpotlightCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+  const ref = useRef(null);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  
+  const springConfig = { damping: 20, stiffness: 200 };
+  const spotlightX = useSpring(mouseX, springConfig);
+  const spotlightY = useSpring(mouseY, springConfig);
+  
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!ref.current) return;
+    const rect = (ref.current as HTMLElement).getBoundingClientRect();
+    mouseX.set(e.clientX - rect.left);
+    mouseY.set(e.clientY - rect.top);
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      className={`relative overflow-hidden ${className}`}
+    >
+      {/* Spotlight effect */}
+      <motion.div
+        className="pointer-events-none absolute -inset-px z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          background: useTransform(
+            [spotlightX, spotlightY],
+            ([x, y]) => `radial-gradient(400px circle at ${x}px ${y}px, rgba(255,107,53,0.15), transparent 40%)`
+          ),
+        }}
+      />
+      {children}
+    </motion.div>
+  );
+}
 
 function MagneticCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const mouseX = useMotionValue(0);
@@ -49,8 +91,8 @@ function MagneticCard({ children, className = "" }: { children: React.ReactNode;
     const rect = e.currentTarget.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
-    mouseX.set((e.clientX - centerX) / 15);
-    mouseY.set((e.clientY - centerY) / 15);
+    mouseX.set((e.clientX - centerX) / 12);
+    mouseY.set((e.clientY - centerY) / 12);
   };
 
   const handleMouseLeave = () => {
@@ -64,7 +106,7 @@ function MagneticCard({ children, className = "" }: { children: React.ReactNode;
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={{ x, y }}
-      className={`magnetic-btn ${className}`}
+      className={className}
     >
       {children}
     </motion.div>
@@ -86,34 +128,50 @@ function BentoCard({
   href?: string;
   variant?: "default" | "primary" | "accent"
 }) {
-  const CardWrapper = href ? Link : motion.div;
+  const CardWrapper = href ? Link : "div";
   
   const variantClasses = {
     default: "glass glass-hover",
     primary: "card-primary",
-    accent: "bg-[#06A77D]/5 border-[#06A77D]/20 hover:border-[#06A77D]/40"
+    accent: "bg-[#06A77D]/5 border-[#06A77D]/20 hover:border-[#06A77D]/50 hover:bg-[#06A77D]/10"
   };
   
   return (
     <MagneticCard className={className}>
-      <CardWrapper
-        href={href || "#"}
-        target={href?.startsWith("http") ? "_blank" : undefined}
-        rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
-        className="block h-full"
-      >
-        <div 
-          className={`relative h-full rounded-2xl border overflow-hidden transition-all duration-500 hover:scale-[1.02] group ${variantClasses[variant]} card-spotlight`}
-          style={{
-            gridColumn: `span ${colSpan}`,
-            gridRow: `span ${rowSpan}`,
-          }}
+      <SpotlightCard className="h-full">
+        <CardWrapper
+          href={href || "#"}
+          target={href?.startsWith("http") ? "_blank" : undefined}
+          rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
+          className="block h-full group cursor-pointer"
         >
-          <div className="relative h-full p-5">
-            {children}
-          </div>
-        </div>
-      </CardWrapper>
+          <motion.div 
+            className={`relative h-full rounded-2xl border overflow-hidden transition-all duration-500 ${variantClasses[variant]}`}
+            style={{
+              gridColumn: `span ${colSpan}`,
+              gridRow: `span ${rowSpan}`,
+            }}
+            whileHover={{ scale: 1.02, y: -4 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+          >
+            {/* Background gradient on hover */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[var(--lobster)]/0 via-[var(--lobster)]/0 to-[var(--lobster)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            
+            {/* Shine effect */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+              style={{
+                background: "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.05) 45%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 55%, transparent 60%)",
+                transform: "translateX(-100%)",
+                animation: "shine 1.5s ease-in-out infinite",
+              }}
+            />
+            
+            <div className="relative h-full p-5">
+              {children}
+            </div>
+          </motion.div>
+        </CardWrapper>
+      </SpotlightCard>
     </MagneticCard>
   );
 }
@@ -124,51 +182,58 @@ const projects = [
     name: "QuerySwitch", 
     desc: "Browser extension for switching search engines on the fly",
     tags: ["Chrome Extension", "JavaScript"],
-    stars: 12 
+    stars: 12,
+    gradient: "from-orange-500/20 to-red-500/20"
   },
   { 
     name: "AI Daily Digest", 
     desc: "Automated AI news aggregator with intelligent summarization",
     tags: ["Python", "OpenAI", "Automation"],
-    stars: 8 
+    stars: 8,
+    gradient: "from-blue-500/20 to-purple-500/20"
   },
   { 
     name: "Document Agent", 
     desc: "AI-powered homework assistant with automated formatting",
     tags: ["Next.js", "Claude API"],
-    stars: 5 
+    stars: 5,
+    gradient: "from-green-500/20 to-teal-500/20"
   },
 ];
 
 export function BentoGrid() {
   return (
     <section id="work" className="relative px-6 sm:px-10 py-24">
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-50px" }}
-        className="max-w-5xl mx-auto"
-      >
+      <div className="max-w-5xl mx-auto">
         {/* Section header */}
-        <motion.div variants={itemVariants} className="mb-12">
+        <ScrollReveal className="mb-12">
           <p className="text-label text-[var(--lobster)] mb-3">Featured Work</p>
           <h2 className="text-title text-[var(--text-primary)] mb-4">Projects & Experiments</h2>
           <p className="text-body text-[var(--text-secondary)] max-w-2xl">
             A selection of tools and applications I've built to solve real problems. 
             Each project represents a learning journey into new technologies and design patterns.
           </p>
-        </motion.div>
+        </ScrollReveal>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[minmax(140px,auto)]">
+        <motion.div 
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-[minmax(140px,auto)]"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+        >
           
           {/* About Card - Primary */}
           <BentoCard colSpan={1} rowSpan={2} variant="primary">
             <div className="h-full flex flex-col">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-[var(--lobster)]/10 flex items-center justify-center">
+                <motion.div 
+                  className="w-10 h-10 rounded-xl bg-[var(--lobster)]/10 flex items-center justify-center"
+                  whileHover={{ rotate: 360, scale: 1.1 }}
+                  transition={{ duration: 0.5 }}
+                >
                   <Sparkles className="w-5 h-5 text-[var(--lobster)]" />
-                </div>
+                </motion.div>
                 <span className="text-label text-[var(--text-muted)]">About</span>
               </div>
               
@@ -191,17 +256,26 @@ export function BentoGrid() {
 
           {/* GitHub Card */}
           <BentoCard href="https://github.com/liyifan2004" variant="accent">
-            <div className="h-full flex items-center justify-between group/card">
+            <div className="h-full flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#06A77D]/10 flex items-center justify-center">
+                <motion.div 
+                  className="w-10 h-10 rounded-xl bg-[#06A77D]/10 flex items-center justify-center"
+                  whileHover={{ scale: 1.1 }}
+                >
                   <Github className="w-5 h-5 text-[#06A77D]" />
-                </div>
+                </motion.div>
                 <div>
                   <p className="text-small font-medium text-[var(--text-primary)]">@liyifan2004</p>
                   <p className="text-xs text-[var(--text-muted)]">Open source contributor</p>
                 </div>
               </div>
-              <ArrowUpRight className="w-5 h-5 text-[var(--text-faint)] group-hover/card:text-[#06A77D] transition-colors" />
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                whileHover={{ x: 0, opacity: 1 }}
+                className="opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <ArrowUpRight className="w-5 h-5 text-[#06A77D]" />
+              </motion.div>
             </div>
           </BentoCard>
 
@@ -209,26 +283,36 @@ export function BentoGrid() {
           <BentoCard>
             <div className="h-full flex flex-col">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-[var(--amber)]/10 flex items-center justify-center">
+                <motion.div 
+                  className="w-10 h-10 rounded-xl bg-[var(--amber)]/10 flex items-center justify-center"
+                  whileHover={{ rotate: [0, -10, 10, 0] }}
+                  transition={{ duration: 0.5 }}
+                >
                   <Terminal className="w-5 h-5 text-[var(--amber)]" />
-                </div>
+                </motion.div>
                 <span className="text-label text-[var(--text-muted)]">Stack</span>
               </div>
               
               <div className="flex flex-wrap gap-2">
                 {[
-                  { name: "Next.js", color: "var(--text-primary)" },
-                  { name: "TypeScript", color: "var(--lobster)" },
-                  { name: "Tailwind", color: "var(--amber)" },
-                  { name: "Python", color: "var(--teal)" },
-                  { name: "React", color: "var(--text-secondary)" },
-                ].map((tech) => (
-                  <span 
-                    key={tech.name} 
-                    className="text-xs px-2.5 py-1 rounded-md bg-white/[0.05] text-[var(--text-muted)] border border-[var(--border)]"
+                  { name: "Next.js", color: "var(--text-primary)", icon: "▲" },
+                  { name: "TypeScript", color: "var(--lobster)", icon: "◈" },
+                  { name: "Tailwind", color: "var(--amber)", icon: "🌊" },
+                  { name: "Python", color: "var(--teal)", icon: "🐍" },
+                  { name: "React", color: "var(--text-secondary)", icon: "⚛" },
+                ].map((tech, i) => (
+                  <motion.span 
+                    key={tech.name}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: i * 0.1 }}
+                    viewport={{ once: true }}
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    className="text-xs px-2.5 py-1.5 rounded-lg bg-white/[0.05] text-[var(--text-muted)] border border-[var(--border)] hover:border-[var(--lobster)]/30 hover:text-[var(--text-primary)] transition-colors cursor-default"
                   >
+                    <span className="mr-1.5">{tech.icon}</span>
                     {tech.name}
-                  </span>
+                  </motion.span>
                 ))}
               </div>
             </div>
@@ -238,27 +322,43 @@ export function BentoGrid() {
           <BentoCard colSpan={2} href="https://github.com/liyifan2004?tab=repositories">
             <div className="h-full flex flex-col">
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-10 h-10 rounded-xl bg-[var(--lobster)]/10 flex items-center justify-center">
+                <motion.div 
+                  className="w-10 h-10 rounded-xl bg-[var(--lobster)]/10 flex items-center justify-center"
+                  whileHover={{ scale: 1.1 }}
+                >
                   <Code2 className="w-5 h-5 text-[var(--lobster)]" />
-                </div>
+                </motion.div>
                 <span className="text-label text-[var(--text-muted)]">Projects</span>
+                <motion.div 
+                  className="ml-auto opacity-0 group-hover:opacity-100"
+                  whileHover={{ x: 3, y: -3 }}
+                >
+                  <ExternalLink className="w-4 h-4 text-[var(--lobster)]" />
+                </motion.div>
               </div>
               
               <div className="flex-1 space-y-3">
                 {projects.map((project, i) => (
                   <motion.div
                     key={project.name}
-                    initial={{ opacity: 0, x: -10 }}
+                    initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.1 }}
+                    transition={{ delay: i * 0.15, duration: 0.5 }}
                     viewport={{ once: true }}
-                    className="p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] transition-colors group/item border border-transparent hover:border-[var(--border)]"
+                    whileHover={{ x: 4, scale: 1.02 }}
+                    className="relative p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.06] transition-all duration-300 group/item border border-transparent hover:border-[var(--border)] overflow-hidden"
                   >
-                    <div className="flex items-start justify-between gap-4">
+                    {/* Hover gradient */}
+                    <div className={`absolute inset-0 bg-gradient-to-r ${project.gradient} opacity-0 group-hover/item:opacity-100 transition-opacity duration-300`} />
+                    
+                    <div className="relative flex items-start justify-between gap-4">
                       <div className="flex-1 min-w-0">
-                        <p className="text-small font-medium text-[var(--text-primary)] group-hover/item:text-[var(--lobster)] transition-colors truncate">
+                        <motion.p 
+                          className="text-small font-medium text-[var(--text-primary)] group-hover/item:text-[var(--lobster)] transition-colors truncate"
+                          whileHover={{ x: 2 }}
+                        >
                           {project.name}
-                        </p>
+                        </motion.p>
                         <p className="text-xs text-[var(--text-muted)] mt-0.5 line-clamp-1">{project.desc}</p>
                         <div className="flex gap-1.5 mt-2">
                           {project.tags.map((tag) => (
@@ -268,10 +368,13 @@ export function BentoGrid() {
                           ))}
                         </div>
                       </div>
-                      <div className="flex items-center gap-1 text-xs text-[var(--text-muted)] shrink-0">
-                        <Zap className="w-3.5 h-3.5" />
+                      <motion.div 
+                        className="flex items-center gap-1 text-xs text-[var(--text-muted)] shrink-0"
+                        whileHover={{ scale: 1.1 }}
+                      >
+                        <Zap className="w-3.5 h-3.5 text-[var(--amber)]" />
                         {project.stars}
-                      </div>
+                      </motion.div>
                     </div>
                   </motion.div>
                 ))}
@@ -290,34 +393,53 @@ export function BentoGrid() {
                 <span className="text-xs text-[var(--teal)] font-medium">Online</span>
               </div>
               
-              <div>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                viewport={{ once: true }}
+              >
                 <p className="text-xs text-[var(--text-muted)] mb-1">Available for</p>
                 <p className="text-body font-medium text-[var(--text-primary)]">Collaboration</p>
-              </div>
+              </motion.div>
             </div>
           </BentoCard>
 
           {/* Contact Card - Wide */}
           <BentoCard colSpan={2} href="mailto:hi@claw.liyi.fan" variant="primary">
-            <div className="h-full flex items-center justify-between group/card">
+            <div className="h-full flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-[var(--lobster)]/10 flex items-center justify-center">
-                  <Mail className="w-6 h-6 text-[var(--lobster)]" />
-                </div>
+                <motion.div 
+                  className="w-12 h-12 rounded-xl bg-[var(--lobster)]/10 flex items-center justify-center relative overflow-hidden"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                >
+                  <Mail className="w-6 h-6 text-[var(--lobster)] relative z-10" />
+                  <motion.div
+                    className="absolute inset-0 bg-[var(--lobster)]/20"
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileHover={{ scale: 2, opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                    style={{ borderRadius: "50%" }}
+                  />
+                </motion.div>
                 <div>
                   <p className="text-body font-medium text-[var(--text-primary)]">Get in touch</p>
                   <p className="text-small text-[var(--text-muted)]">hi@claw.liyi.fan</p>
                 </div>
               </div>
               
-              <div className="px-4 py-2 rounded-full border border-[var(--border)] text-xs text-[var(--text-secondary)] group-hover/card:border-[var(--lobster)]/50 group-hover/card:text-[var(--lobster)] transition-colors">
+              <motion.div 
+                className="px-4 py-2 rounded-full border border-[var(--border)] text-xs text-[var(--text-secondary)] group-hover:border-[var(--lobster)]/50 group-hover:text-[var(--lobster)] group-hover:bg-[var(--lobster)]/10 transition-all"
+                whileHover={{ scale: 1.05, x: 3 }}
+                whileTap={{ scale: 0.98 }}
+              >
                 Say hello →
-              </div>
+              </motion.div>
             </div>
           </BentoCard>
 
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </section>
   );
 }
