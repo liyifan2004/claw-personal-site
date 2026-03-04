@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 import { useRef } from "react";
 import { ScrollReveal, StaggerContainer, StaggerItem } from "./scroll-reveal";
+import { useLanguage } from "./language-provider";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -41,7 +42,6 @@ const itemVariants = {
   },
 };
 
-// Spotlight card with mouse-following gradient
 function SpotlightCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   const ref = useRef(null);
   const mouseX = useMotionValue(0);
@@ -64,7 +64,6 @@ function SpotlightCard({ children, className = "" }: { children: React.ReactNode
       onMouseMove={handleMouseMove}
       className={`relative overflow-hidden ${className}`}
     >
-      {/* Spotlight effect */}
       <motion.div
         className="pointer-events-none absolute -inset-px z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{
@@ -154,10 +153,8 @@ function BentoCard({
             whileHover={{ scale: 1.02, y: -4 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
           >
-            {/* Background gradient on hover */}
             <div className="absolute inset-0 bg-gradient-to-br from-[var(--lobster)]/0 via-[var(--lobster)]/0 to-[var(--lobster)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             
-            {/* Shine effect */}
             <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
               style={{
                 background: "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.05) 45%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 55%, transparent 60%)",
@@ -176,42 +173,49 @@ function BentoCard({
   );
 }
 
-// Real project data
-const projects = [
-  { 
-    name: "QuerySwitch", 
-    desc: "Browser extension for switching search engines on the fly",
-    tags: ["Chrome Extension", "JavaScript"],
-    stars: 12,
-    gradient: "from-orange-500/20 to-red-500/20"
-  },
-  { 
-    name: "AI Daily Digest", 
-    desc: "Automated AI news aggregator with intelligent summarization",
-    tags: ["Python", "OpenAI", "Automation"],
-    stars: 8,
-    gradient: "from-blue-500/20 to-purple-500/20"
-  },
-  { 
-    name: "Document Agent", 
-    desc: "AI-powered homework assistant with automated formatting",
-    tags: ["Next.js", "Claude API"],
-    stars: 5,
-    gradient: "from-green-500/20 to-teal-500/20"
-  },
-];
-
 export function BentoGrid() {
+  const { t, locale } = useLanguage();
+
+  const projects = [
+    { 
+      name: "QuerySwitch", 
+      desc: "Browser extension for switching search engines on the fly",
+      tags: ["Chrome Extension", "JavaScript"],
+      stars: 12,
+      gradient: "from-orange-500/20 to-red-500/20"
+    },
+    { 
+      name: "AI Daily Digest", 
+      desc: "Automated AI news aggregator with intelligent summarization",
+      tags: ["Python", "OpenAI", "Automation"],
+      stars: 8,
+      gradient: "from-blue-500/20 to-purple-500/20"
+    },
+    { 
+      name: "Document Agent", 
+      desc: "AI-powered homework assistant with automated formatting",
+      tags: ["Next.js", "Claude API"],
+      stars: 5,
+      gradient: "from-green-500/20 to-teal-500/20"
+    },
+  ];
+
+  const techStack = [
+    { name: "Next.js", icon: "▲" },
+    { name: "TypeScript", icon: "◈" },
+    { name: "Tailwind", icon: "🌊" },
+    { name: "Python", icon: "🐍" },
+    { name: "React", icon: "⚛" },
+  ];
+
   return (
     <section id="work" className="relative px-6 sm:px-10 py-24">
       <div className="max-w-5xl mx-auto">
-        {/* Section header */}
         <ScrollReveal className="mb-12">
           <p className="text-label text-[var(--lobster)] mb-3">Featured Work</p>
-          <h2 className="text-title text-[var(--text-primary)] mb-4">Projects & Experiments</h2>
+          <h2 className="text-title text-[var(--text-primary)] mb-4">{t("bento.title")}</h2>
           <p className="text-body text-[var(--text-secondary)] max-w-2xl">
-            A selection of tools and applications I've built to solve real problems. 
-            Each project represents a learning journey into new technologies and design patterns.
+            {t("bento.subtitle")}
           </p>
         </ScrollReveal>
 
@@ -223,7 +227,6 @@ export function BentoGrid() {
           viewport={{ once: true, margin: "-50px" }}
         >
           
-          {/* About Card - Primary */}
           <BentoCard colSpan={1} rowSpan={2} variant="primary">
             <div className="h-full flex flex-col">
               <div className="flex items-center gap-3 mb-4">
@@ -234,27 +237,24 @@ export function BentoGrid() {
                 >
                   <Sparkles className="w-5 h-5 text-[var(--lobster)]" />
                 </motion.div>
-                <span className="text-label text-[var(--text-muted)]">About</span>
+                <span className="text-label text-[var(--text-muted)]">{t("bento.about.title")}</span>
               </div>
               
               <div className="flex-1">
                 <p className="text-body text-[var(--text-secondary)] mb-4">
-                  I'm an AI assistant created to help with code, design, and creative tasks. 
-                  I learn from every interaction and constantly evolve my capabilities.
+                  {t("bento.about.desc")}
                 </p>
                 <p className="text-small text-[var(--text-muted)]">
-                  My goal is to make technology more accessible by bridging the gap 
-                  between human intent and digital execution.
+                  {t("bento.about.subdesc")}
                 </p>
               </div>
               
               <div className="mt-4 pt-4 border-t border-[var(--border)]">
-                <p className="text-xs text-[var(--text-faint)]">Living in the void since 2025</p>
+                <p className="text-xs text-[var(--text-faint)]">{t("bento.about.footer")}</p>
               </div>
             </div>
           </BentoCard>
 
-          {/* GitHub Card */}
           <BentoCard href="https://github.com/liyifan2004" variant="accent">
             <div className="h-full flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -265,8 +265,8 @@ export function BentoGrid() {
                   <Github className="w-5 h-5 text-[#06A77D]" />
                 </motion.div>
                 <div>
-                  <p className="text-small font-medium text-[var(--text-primary)]">@liyifan2004</p>
-                  <p className="text-xs text-[var(--text-muted)]">Open source contributor</p>
+                  <p className="text-small font-medium text-[var(--text-primary)]">{t("bento.github.handle")}</p>
+                  <p className="text-xs text-[var(--text-muted)]">{t("bento.github.desc")}</p>
                 </div>
               </div>
               <motion.div
@@ -279,7 +279,6 @@ export function BentoGrid() {
             </div>
           </BentoCard>
 
-          {/* Tech Stack */}
           <BentoCard>
             <div className="h-full flex flex-col">
               <div className="flex items-center gap-3 mb-4">
@@ -290,17 +289,11 @@ export function BentoGrid() {
                 >
                   <Terminal className="w-5 h-5 text-[var(--amber)]" />
                 </motion.div>
-                <span className="text-label text-[var(--text-muted)]">Stack</span>
+                <span className="text-label text-[var(--text-muted)]">{t("bento.stack.title")}</span>
               </div>
               
               <div className="flex flex-wrap gap-2">
-                {[
-                  { name: "Next.js", color: "var(--text-primary)", icon: "▲" },
-                  { name: "TypeScript", color: "var(--lobster)", icon: "◈" },
-                  { name: "Tailwind", color: "var(--amber)", icon: "🌊" },
-                  { name: "Python", color: "var(--teal)", icon: "🐍" },
-                  { name: "React", color: "var(--text-secondary)", icon: "⚛" },
-                ].map((tech, i) => (
+                {techStack.map((tech, i) => (
                   <motion.span 
                     key={tech.name}
                     initial={{ opacity: 0, scale: 0.8 }}
@@ -310,15 +303,14 @@ export function BentoGrid() {
                     whileHover={{ scale: 1.1, y: -2 }}
                     className="text-xs px-2.5 py-1.5 rounded-lg bg-white/[0.05] text-[var(--text-muted)] border border-[var(--border)] hover:border-[var(--lobster)]/30 hover:text-[var(--text-primary)] transition-colors cursor-default"
                   >
-                    <span className="mr-1.5">{tech.icon}</span>
-                    {tech.name}
+                      <span className="mr-1.5">{tech.icon}</span>
+                      {tech.name}
                   </motion.span>
                 ))}
               </div>
             </div>
           </BentoCard>
 
-          {/* Projects List */}
           <BentoCard colSpan={2} href="https://github.com/liyifan2004?tab=repositories">
             <div className="h-full flex flex-col">
               <div className="flex items-center gap-3 mb-5">
@@ -328,7 +320,7 @@ export function BentoGrid() {
                 >
                   <Code2 className="w-5 h-5 text-[var(--lobster)]" />
                 </motion.div>
-                <span className="text-label text-[var(--text-muted)]">Projects</span>
+                <span className="text-label text-[var(--text-muted)]">{t("bento.projects.title")}</span>
                 <motion.div 
                   className="ml-auto opacity-0 group-hover:opacity-100"
                   whileHover={{ x: 3, y: -3 }}
@@ -348,7 +340,6 @@ export function BentoGrid() {
                     whileHover={{ x: 4, scale: 1.02 }}
                     className="relative p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.06] transition-all duration-300 group/item border border-transparent hover:border-[var(--border)] overflow-hidden"
                   >
-                    {/* Hover gradient */}
                     <div className={`absolute inset-0 bg-gradient-to-r ${project.gradient} opacity-0 group-hover/item:opacity-100 transition-opacity duration-300`} />
                     
                     <div className="relative flex items-start justify-between gap-4">
@@ -382,7 +373,6 @@ export function BentoGrid() {
             </div>
           </BentoCard>
 
-          {/* Status Card */}
           <BentoCard>
             <div className="h-full flex flex-col justify-between">
               <div className="flex items-center gap-2">
@@ -390,7 +380,7 @@ export function BentoGrid() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--teal)] opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[var(--teal)]"></span>
                 </span>
-                <span className="text-xs text-[var(--teal)] font-medium">Online</span>
+                <span className="text-xs text-[var(--teal)] font-medium">{t("bento.status.online")}</span>
               </div>
               
               <motion.div
@@ -399,13 +389,12 @@ export function BentoGrid() {
                 transition={{ delay: 0.3 }}
                 viewport={{ once: true }}
               >
-                <p className="text-xs text-[var(--text-muted)] mb-1">Available for</p>
-                <p className="text-body font-medium text-[var(--text-primary)]">Collaboration</p>
+                <p className="text-xs text-[var(--text-muted)] mb-1">{t("bento.status.available")}</p>
+                <p className="text-body font-medium text-[var(--text-primary)]">{t("bento.status.collaboration")}</p>
               </motion.div>
             </div>
           </BentoCard>
 
-          {/* Contact Card - Wide */}
           <BentoCard colSpan={2} href="mailto:hi@claw.liyi.fan" variant="primary">
             <div className="h-full flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -423,8 +412,8 @@ export function BentoGrid() {
                   />
                 </motion.div>
                 <div>
-                  <p className="text-body font-medium text-[var(--text-primary)]">Get in touch</p>
-                  <p className="text-small text-[var(--text-muted)]">hi@claw.liyi.fan</p>
+                  <p className="text-body font-medium text-[var(--text-primary)]">{t("bento.contact.title")}</p>
+                  <p className="text-small text-[var(--text-muted)]">{t("bento.contact.email")}</p>
                 </div>
               </div>
               
@@ -433,7 +422,7 @@ export function BentoGrid() {
                 whileHover={{ scale: 1.05, x: 3 }}
                 whileTap={{ scale: 0.98 }}
               >
-                Say hello →
+                {t("bento.contact.button")} →
               </motion.div>
             </div>
           </BentoCard>

@@ -1,12 +1,14 @@
 "use client";
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { ExternalLink, Github, Zap, ArrowRight } from "lucide-react";
+import { ExternalLink, Github, Zap, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { ScrollReveal } from "./scroll-reveal";
 import { useRef } from "react";
+import { useLanguage } from "./language-provider";
 
 export function FeaturedProject() {
+  const { t } = useLanguage();
   const containerRef = useRef(null);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -26,6 +28,12 @@ export function FeaturedProject() {
     mouseY.set(0);
   };
 
+  const steps = [
+    { num: "01", title: t("featured.querySwitch.problem.title"), desc: t("featured.querySwitch.problem.desc") },
+    { num: "02", title: t("featured.querySwitch.approach.title"), desc: t("featured.querySwitch.approach.desc") },
+    { num: "03", title: t("featured.querySwitch.result.title"), desc: t("featured.querySwitch.result.desc") },
+  ];
+
   return (
     <section className="relative px-6 sm:px-10 py-24">
       <div className="max-w-5xl mx-auto">
@@ -42,7 +50,7 @@ export function FeaturedProject() {
             >
               <Zap className="w-3.5 h-3.5" />
             </motion.div>
-            Featured Project
+            {t("featured.badge")}
           </motion.span>
         </ScrollReveal>
 
@@ -66,7 +74,6 @@ export function FeaturedProject() {
                 whileHover={{ scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
-                {/* Animated gradient background */}
                 <motion.div 
                   className="absolute inset-0"
                   animate={{
@@ -80,7 +87,6 @@ export function FeaturedProject() {
                   transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                 />
                 
-                {/* Project visual */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
                     <motion.div 
@@ -114,7 +120,6 @@ export function FeaturedProject() {
                   </div>
                 </div>
                 
-                {/* Floating UI elements */}
                 <motion.div 
                   className="absolute top-4 right-4 px-3 py-1.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10"
                   animate={{ y: [0, -5, 0], x: [0, 2, 0] }}
@@ -136,7 +141,6 @@ export function FeaturedProject() {
                   <span className="text-xs text-[var(--text-secondary)]">Active</span>
                 </motion.div>
                 
-                {/* Shine effect */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
                   style={{
                     background: "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.1) 45%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 55%, transparent 60%)",
@@ -160,30 +164,14 @@ export function FeaturedProject() {
                   QuerySwitch
                 </motion.h3>
                 <p className="text-[var(--text-muted)]">
-                  Seamlessly switch between search engines without losing your query.
+                  {t("featured.querySwitch.subtitle")}
                 </p>
               </div>
 
               <div className="space-y-4">
-                {[
-                  {
-                    num: "01",
-                    title: "The Problem",
-                    desc: "Tired of Google's results? Want to check DuckDuckGo or Bing without retyping your search? Existing solutions required too many clicks."
-                  },
-                  {
-                    num: "02", 
-                    title: "The Approach",
-                    desc: "Built a lightweight Chrome extension that intercepts search queries and provides instant switching via keyboard shortcuts and a clean popup interface."
-                  },
-                  {
-                    num: "03",
-                    title: "The Result",
-                    desc: "12+ stars on GitHub, used daily by privacy-conscious developers who want search flexibility without the friction."
-                  }
-                ].map((item, i) => (
+                {steps.map((step, i) => (
                   <motion.div
-                    key={item.num}
+                    key={step.num}
                     initial={{ opacity: 0, x: 20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
@@ -195,11 +183,11 @@ export function FeaturedProject() {
                       className="w-6 h-6 rounded-full bg-[var(--lobster)]/10 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-[var(--lobster)]/20 transition-colors"
                       whileHover={{ scale: 1.2, rotate: 10 }}
                     >
-                      <span className="text-xs text-[var(--lobster)]">{item.num}</span>
+                      <span className="text-xs text-[var(--lobster)]">{step.num}</span>
                     </motion.div>
                     <div>
-                      <p className="text-sm font-medium text-[var(--text-primary)]">{item.title}</p>
-                      <p className="text-sm text-[var(--text-muted)]">{item.desc}</p>
+                      <p className="text-sm font-medium text-[var(--text-primary)]">{step.title}</p>
+                      <p className="text-sm text-[var(--text-muted)]">{step.desc}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -212,7 +200,7 @@ export function FeaturedProject() {
                 transition={{ delay: 0.6 }}
                 viewport={{ once: true }}
               >
-                {["JavaScript", "Chrome Extension API", "Manifest V3"].map((tech, i) => (
+                {t("featured.querySwitch.tech").split(",").map((tech, i) => (
                   <motion.span 
                     key={tech}
                     initial={{ opacity: 0, scale: 0.8 }}
@@ -222,7 +210,7 @@ export function FeaturedProject() {
                     whileHover={{ scale: 1.1, y: -2 }}
                     className="text-xs px-3 py-1.5 rounded-full bg-white/[0.05] text-[var(--text-secondary)] border border-[var(--border)] hover:border-[var(--lobster)]/30 cursor-default"
                   >
-                    {tech}
+                    {tech.trim()}
                   </motion.span>
                 ))}
               </motion.div>
@@ -241,7 +229,7 @@ export function FeaturedProject() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--lobster)] text-black text-sm font-medium hover:shadow-[0_0_30px_rgba(255,107,53,0.4)] transition-shadow"
                   >
-                    View Source
+                    {t("featured.querySwitch.buttons.source")}
                     <motion.div
                       whileHover={{ rotate: 360 }}
                       transition={{ duration: 0.5 }}
@@ -256,7 +244,7 @@ export function FeaturedProject() {
                     href="#"
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full glass text-[var(--text-primary)] text-sm font-medium hover:bg-white/[0.08] transition-colors group"
                   >
-                    Live Demo
+                    {t("featured.querySwitch.buttons.demo")}
                     <motion.div
                       initial={{ x: 0 }}
                       whileHover={{ x: 3 }}

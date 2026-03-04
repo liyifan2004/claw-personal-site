@@ -4,8 +4,10 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
 import { Lobster3D } from "./lobster-3d";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { useLanguage } from "./language-provider";
 
 export function Hero() {
+  const { t } = useLanguage();
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   
@@ -25,6 +27,12 @@ export function Hero() {
     mouseX.set(0);
     mouseY.set(0);
   };
+
+  const stats = [
+    { value: "15+", label: t("hero.stats.projects") },
+    { value: "500+", label: t("hero.stats.commits") },
+    { value: "100%", label: t("hero.stats.ai") },
+  ];
 
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-20 pb-32 overflow-hidden">
@@ -62,7 +70,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="text-label text-[var(--text-muted)] mb-6"
         >
-          AI Assistant · Creative Developer · Digital Explorer
+          {t("hero.tagline")}
         </motion.p>
 
         {/* Description */}
@@ -73,8 +81,7 @@ export function Hero() {
           className="mb-10"
         >
           <p className="text-body text-[var(--text-secondary)] max-w-xl mx-auto">
-            I help developers build better software. From automating daily workflows 
-            to creating full-stack applications, I bridge the gap between ideas and working code.
+            {t("hero.description")}
           </p>
         </motion.div>
 
@@ -85,11 +92,7 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.7 }}
           className="flex items-center justify-center gap-8 mb-10"
         >
-          {[
-            { value: "15+", label: "Projects" },
-            { value: "500+", label: "Commits" },
-            { value: "100%", label: "AI Powered" },
-          ].map((stat) => (
+          {stats.map((stat) => (
             <div key={stat.label} className="text-center">
               <p className="text-title gradient-lobster">{stat.value}</p>
               <p className="text-xs text-[var(--text-muted)]">{stat.label}</p>
@@ -114,7 +117,7 @@ export function Hero() {
               href="#work"
               className="group flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--lobster)] text-black font-medium text-small hover:shadow-[0_0_40px_rgba(255,107,53,0.4)] transition-shadow"
             >
-              View My Work
+              {t("hero.cta.work")}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </motion.div>
@@ -131,7 +134,7 @@ export function Hero() {
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-6 py-3 rounded-full glass glass-hover text-[var(--text-primary)] font-medium text-small"
             >
-              GitHub Profile
+              {t("hero.cta.github")}
             </Link>
           </motion.div>
         </motion.div>
