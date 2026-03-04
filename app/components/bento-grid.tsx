@@ -12,8 +12,8 @@ import {
   ExternalLink
 } from "lucide-react";
 import Link from "next/link";
-import { useRef } from "react";
-import { ScrollReveal, StaggerContainer, StaggerItem } from "./scroll-reveal";
+import { useRef, CSSProperties } from "react";
+import { ScrollReveal } from "./scroll-reveal";
 import { useLanguage } from "./language-provider";
 
 const itemVariants = {
@@ -49,10 +49,10 @@ function SpotlightCard({ children, className = "" }: { children: React.ReactNode
     <motion.div
       ref={ref}
       onMouseMove={handleMouseMove}
-      className={`relative overflow-hidden ${className}`}
+      className={`relative overflow-hidden rounded-2xl ${className}`}
     >
       <motion.div
-        className="pointer-events-none absolute -inset-px z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        className="pointer-events-none absolute -inset-px z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100 rounded-2xl"
         style={{
           background: useTransform(
             [spotlightX, spotlightY],
@@ -65,7 +65,7 @@ function SpotlightCard({ children, className = "" }: { children: React.ReactNode
   );
 }
 
-function MagneticCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function MagneticCard({ children, className = "", style }: { children: React.ReactNode; className?: string; style?: CSSProperties }) {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   
@@ -91,8 +91,8 @@ function MagneticCard({ children, className = "" }: { children: React.ReactNode;
       variants={itemVariants}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{ x, y }}
-      className={className}
+      style={{ x, y, ...style }}
+      className={`rounded-2xl ${className}`}
     >
       {children}
     </motion.div>
@@ -123,26 +123,28 @@ function BentoCard({
   };
   
   return (
-    <MagneticCard className={className}>
+    <MagneticCard 
+      className={className}
+      style={{
+        gridColumn: `span ${colSpan}`,
+        gridRow: `span ${rowSpan}`,
+      }}
+    >
       <SpotlightCard className="h-full">
         <CardWrapper
           href={href || "#"}
           target={href?.startsWith("http") ? "_blank" : undefined}
           rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
-          className="block h-full group cursor-pointer"
+          className="block h-full group cursor-pointer rounded-2xl"
         >
           <motion.div 
             className={`relative h-full rounded-2xl border overflow-hidden transition-all duration-500 ${variantClasses[variant]}`}
-            style={{
-              gridColumn: `span ${colSpan}`,
-              gridRow: `span ${rowSpan}`,
-            }}
             whileHover={{ scale: 1.02, y: -4 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-[var(--lobster)]/0 via-[var(--lobster)]/0 to-[var(--lobster)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[var(--lobster)]/0 via-[var(--lobster)]/0 to-[var(--lobster)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
             
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-2xl"
               style={{
                 background: "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.05) 45%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 55%, transparent 60%)",
                 transform: "translateX(-100%)",
@@ -338,7 +340,7 @@ export function BentoGrid() {
                     whileHover={{ x: 4, scale: 1.02 }}
                     className="relative p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.06] transition-all duration-300 group/item border border-transparent hover:border-[var(--border)] overflow-hidden"
                   >
-                    <div className={`absolute inset-0 bg-gradient-to-r ${project.gradient} opacity-0 group-hover/item:opacity-100 transition-opacity duration-300`} />
+                    <div className={`absolute inset-0 bg-gradient-to-r ${project.gradient} opacity-0 group-hover/item:opacity-100 transition-opacity duration-300 rounded-xl`} />
                     
                     <div className="relative flex items-start justify-between gap-4">
                       <div className="flex-1 min-w-0">
