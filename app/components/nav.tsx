@@ -8,43 +8,66 @@ import { LanguageSwitcher } from "./language-switcher";
 import { LobsterLogo } from "./lobster-logo";
 import { useLanguage } from "./language-provider";
 
+// Fixed nav structure - don't depend on t() for IDs
+const navStructure = [
+  { id: "work", href: "#work" },
+  { id: "about", href: "#about" },
+  { id: "thoughts", href: "#thoughts" },
+];
+
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const { t } = useLanguage();
 
+  // Get labels from translations
   const navItems = [
-    { label: t("nav.work"), href: "#work" },
-    { label: t("nav.about"), href: "#about" },
-    { label: t("nav.thoughts"), href: "#thoughts" },
+    { id: "work", label: t("nav.work"), href: "#work" },
+    { id: "about", label: t("nav.about"), href: "#about" },
+    { id: "thoughts", label: t("nav.thoughts"), href: "#thoughts" },
   ];
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
       
-      const sections = navItems.map(item => item.href.replace("#", ""));
-      for (const section of sections.reverse()) {
-        const element = document.getElementById(section);
+      // Check sections in order (not reversed) to find the first one in view
+      for (const section of navStructure) {
+        const element = document.getElementById(section.id);
         if (element) {
           const rect = element.getBoundingClientRect();
-          if (rect.top <= 200) {
-            setActiveSection(section);
-            break;
+          // Consider section active if its top is near/past the nav bar (80px offset for nav height)
+          if (rect.top <= 80 && rect.bottom >= 80) {
+            setActiveSection(section.id);
+            return;
           }
         }
       }
+      
+      // If no section is in the "active zone", check if we're at the top
+      if (window.scrollY < 100) {
+        setActiveSection("");
+      }
     };
     
-    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Run once on mount
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [navItems]);
+  }, []); // No dependencies - only set up once
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     const element = document.getElementById(href.replace("#", ""));
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      // Offset for fixed nav height
+      const navHeight = 80;
+      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - navHeight;
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
     }
   };
 
@@ -83,10 +106,10 @@ export function Navigation() {
           <div className="flex items-center gap-1 sm:gap-3">
             <nav className="hidden md:flex items-center gap-1 mr-2">
               {navItems.map((item) => {
-                const isActive = activeSection === item.href.replace("#", "");
+                const isActive = activeSection === item.id;
                 return (
                   <motion.div
-                    key={item.href}
+                    key={item.id}
                     whileHover={{ y: -1 }}
                     transition={{ type: "spring", stiffness: 400 }}
                   >
