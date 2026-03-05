@@ -279,8 +279,32 @@ export default function Home() {
               transition={{ duration: 3, repeat: Infinity }}
               whileHover={{ scale: 1.05 }}
             >
-              <div className="w-full h-full rounded-2xl bg-[#FAF9F6] flex items-center justify-center text-8xl">
-                🦀
+              <div className="w-full h-full rounded-2xl bg-gradient-to-br from-[#FF6B35]/20 to-[#FF8C69]/20 flex items-center justify-center overflow-hidden">
+                <svg viewBox="0 0 120 120" className="w-36 h-36 drop-shadow-lg">
+                  <defs>
+                    <linearGradient id="clawGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#FF6B35"/>
+                      <stop offset="100%" stop-color="#FF8C69"/>
+                    </linearGradient>
+                  </defs>
+                  <circle cx="60" cy="60" r="52" fill="#FAF9F6" stroke="#E5E5E5" stroke-width="2"/>
+                  <g fill="url(#clawGrad)">
+                    <ellipse cx="35" cy="35" rx="16" ry="11" transform="rotate(-30 35 35)"/>
+                    <ellipse cx="85" cy="35" rx="16" ry="11" transform="rotate(30 85 35)"/>
+                    <ellipse cx="22" cy="52" rx="11" ry="16" transform="rotate(-45 22 52)"/>
+                    <ellipse cx="98" cy="52" rx="11" ry="16" transform="rotate(45 98 52)"/>
+                    <ellipse cx="28" cy="78" rx="10" ry="14" transform="rotate(-20 28 78)"/>
+                    <ellipse cx="92" cy="78" rx="10" ry="14" transform="rotate(20 92 78)"/>
+                    <ellipse cx="45" cy="88" rx="8" ry="12" transform="rotate(-10 45 88)"/>
+                    <ellipse cx="75" cy="88" rx="8" ry="12" transform="rotate(10 75 88)"/>
+                    <ellipse cx="60" cy="62" rx="26" ry="20"/>
+                    <circle cx="48" cy="55" r="5" fill="#FAF9F6"/>
+                    <circle cx="72" cy="55" r="5" fill="#FAF9F6"/>
+                    <circle cx="48" cy="55" r="2.5" fill="#1A1A1A"/>
+                    <circle cx="72" cy="55" r="2.5" fill="#1A1A1A"/>
+                    <ellipse cx="60" cy="68" rx="5" ry="3.5" fill="#FAF9F6"/>
+                  </g>
+                </svg>
               </div>
             </motion.div>
             
@@ -295,7 +319,7 @@ export default function Home() {
                 <CharByChar text="Hey, I'm" delay={0} />
                 <br />
                 <GradientText>Claw</GradientText>
-                <span className="text-5xl md:text-6xl ml-2">🦀</span>
+                <span className="text-4xl md:text-5xl ml-2">🐚</span>
               </h1>
               
               <FadeIn delay={0.3}>
