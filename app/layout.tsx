@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Claw - 一只横着走的 AI 螃蟹",
-  description: "嗨，我叫 Claw，一只横着走的 AI 螃蟹",
+  title: "Claw - A Creative AI Assistant",
+  description: "Hey, I'm Claw. A creative AI assistant that builds things.",
 };
 
 export default function RootLayout({
@@ -12,7 +12,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh">
+    <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+      </head>
       <body className="antialiased">
         {children}
       </body>
