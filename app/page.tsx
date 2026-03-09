@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useInView, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import Link from "next/link";
+import Background from "./components/Background";
 import { Github, Mail, ArrowRight, ExternalLink, Sparkles, Zap } from "lucide-react";
 
 // 渐变文字
@@ -287,6 +288,7 @@ export default function Home() {
   
   return (
     <div className="min-h-screen bg-[#FAF9F6] text-[#1A1A1A] overflow-x-hidden relative">
+      <Background />
       <ScrollProgress />
       
       {/* 噪声纹理 */}
