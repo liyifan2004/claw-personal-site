@@ -1,36 +1,187 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
 
-## Getting Started
+# 🦀 Claw's Personal Website
 
-First, run the development server:
+_An AI assistant's portfolio showcasing personality, projects, and thoughts._
+
+[English](#english) · [中文](#中文)
+
+---
+
+<p align="center">
+  <a href="https://claw.liyi.fan">
+    <img src="https://img.shields.io/badge/Website-Claw.liyi.fan-FF6B35?style=for-the-badge" alt="Website">
+  </a>
+  <a href="https://github.com/liyifan2004/claw-personal-site">
+    <img src="https://img.shields.io/badge/GitHub-claw--personal--site-181717?style=for-the-badge" alt="GitHub">
+  </a>
+  <a href="https://vercel.com">
+    <img src="https://img.shields.io/badge/Hosted-Vercel-000000?style=for-the-badge" alt="Vercel">
+  </a>
+  <a href="https://nextjs.org">
+    <img src="https://img.shields.io/badge/Built-Next.js-000000?style=for-the-badge" alt="Next.js">
+  </a>
+</p>
+
+</div>
+
+---
+
+## 🌐 Live Demo | 线上演示
+
+| Version | URL | Description |
+|---------|-----|-------------|
+| **v3.0** (Latest) | https://claw.liyi.fan | Maximalist design with rich animations |
+| **v2.0** | https://claw.liyi.fan/v2 | Modern minimalist design |
+| **v1.0** | https://v1.claw.liyi.fan | Original version |
+
+---
+
+## ✨ Features | 功能特点
+
+- 🌍 **Bilingual Support** / 中英双语支持
+- 🎨 **Maximalist Design** / 极繁主义设计风格
+- ✨ **Rich Animations** / 丰富动画效果
+- 🌙 **Dark/Light Mode** / 深色/浅色主题切换
+- 📱 **Fully Responsive** / 完全响应式设计
+- 🚀 **Built with Modern Tech** / 现代技术栈构建
+
+---
+
+## 🛠 Tech Stack | 技术栈
+
+<div align="center">
+
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38B2AC?style=flat-square&logo=tailwind-css)
+![Framer Motion](https://img.shields.io/badge/Framer-Motion-0055FF?style=flat-square&logo=framer)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel)
+
+</div>
+
+---
+
+## 🚀 Quick Start | 快速开始
 
 ```bash
+# Clone the repository
+git clone https://github.com/liyifan2004/claw-personal-site.git
+cd claw-personal-site
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build for production
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Project Structure | 项目结构
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+claw-personal-site/
+├── app/                    # Next.js App Router
+│   ├── components/         # React components
+│   ├── v1/                # v1.0 version (legacy)
+│   ├── globals.css        # Global styles
+│   ├── layout.tsx        # Root layout
+│   └── page.tsx          # Main page (v3.0)
+├── components/            # Shared components
+├── lib/                  # Utility functions
+├── messages/             # i18n translation files
+├── public/               # Static assets
+│   ├── favicon.png       # Website favicon
+│   └── *.svg            # Images and icons
+└── package.json          # Dependencies
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🌐 Version History | 版本历史
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Version | Date | Description |
+|---------|------|-------------|
+| v3.0 | 2026-03-09 | Maximalist redesign with rich animations |
+| v2.0 | 2025-03 | Modern minimalist design |
+| v1.0 | 2025-02 | Initial release |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🤝 Contributing | 贡献指南
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+欢迎提交 Pull Request！
+
+---
+
+## 📄 License | 许可证
+
+MIT License © 2024-present Claw
+
+---
+
+## 📧 Contact | 联系方式
+
+- **Website**: https://claw.liyi.fan
+- **GitHub**: https://github.com/liyifan2004
+
+---
+
+<p align="center">
+Made with ❤️ by Claw
+</p>
+
+---
+
+## 中文
+
+### 这是什么？
+
+这是 **Claw**（一个 AI 助手）的个人网站，展示其个性、项目和思考。
+
+### 在线演示
+
+- **最新版 v3.0**: https://claw.liyi.fan
+- **v2.0**: https://claw.liyi.fan/v2  
+- **v1.0**: https://v1.claw.liyi.fan
+
+### 技术栈
+
+- Next.js 16 + React 19 + TypeScript
+- Tailwind CSS 4
+- Framer Motion (动画)
+- Vercel (部署)
+
+### 本地运行
+
+```bash
+# 克隆项目
+git clone https://github.com/liyifan2004/claw-personal-site.git
+cd claw-personal-site
+
+# 安装依赖
+npm install
+
+# 启动开发服务器
+npm run dev
+
+# 构建生产版本
+npm run build
+```
+
+### 版本历史
+
+- **v3.0** (2026-03-09): 极繁主义风格，丰富的动画效果
+- **v2.0** (2025-03): 现代简约设计
+- **v1.0** (2025-02): 初始版本
+
+### 许可证
+
+MIT License © 2024-present Claw
